@@ -42,21 +42,28 @@ typedef struct {
     float bill;
 } ELEXBILL;
 
-
+// Tan
 ELEXBILL getInput();
-
-void deleteRecord(ELEXBILL bills[], int *n);
-void edito(ELEXBILL bills[], int n);  
-void display(ELEXBILL e);	
 void printAll(ELEXBILL bills[], int n);
-int searchIndex(ELEXBILL bills[], int n, char accNum[]);
-void create(ELEXBILL bills[], int *n);
-void userSearch(ELEXBILL bills[], int n);
 void CheckBalance(ELEXBILL bills[], int n);
-void searchBillCode(ELEXBILL bills[], int n);
-void displayPowerMeteringInfo(ELEXBILL bills[], int n);
+void searchAccNum(ELEXBILL bills[], int n);
+
+// v2
 void saveToFile(ELEXBILL bills[], int n);
 int loadFromFile(ELEXBILL bills[]);
+
+// Kent
+void edito(ELEXBILL bills[], int n);  // v1 v2
+void display(ELEXBILL e);
+
+//Solon
+void displayPowerMeteringInfo(ELEXBILL bills[], int n);
+int searchIndex(ELEXBILL bills[], int n, char accNum[]);
+void create(ELEXBILL bills[], int *n); // v2
+
+// David
+void searchBillCode(ELEXBILL bills[], int n);
+void deleteRecord(ELEXBILL bills[], int *n); // v1 v2
 
 
 int main() {
@@ -90,7 +97,7 @@ int main() {
                 break;
             case 2:
             	system("cls");
-                userSearch(bills, n);
+                searchAccNum(bills, n);
                 break;
             case 3:
             	system("cls");
@@ -155,7 +162,7 @@ ELEXBILL getInput() {
     scanf(" %[^\n]", e.address.street);
 
     printf("Enter City: ");
-    scanf("%s", e.address.city);
+    scanf(" %[^\n]", e.address.city);
 
     printf("Enter Zip Code: ");
     scanf("%s", e.address.zip);
@@ -225,7 +232,7 @@ void display(ELEXBILL e) {
     		printf("??????");
     		break;
 	}
-    printf("/ %d / %d\n", e.dates.day, e.dates.Year);
+    printf("%d, %d\n", e.dates.day, e.dates.Year);
     printf("Address: %s, %s, %s\n", e.address.street, e.address.city, e.address.zip);
     printf("Previous Reading: %.2f kWh / %.2f hrs = %.2f kw/hr\n", e.previousReading.nKilowatt, e.previousReading.nHours, e.previousReading.kwperhr);
     printf("Current Reading: %.2f kWh / %.2f hrs = %.2f kw/hr\n", e.currentReading.nKilowatt, e.currentReading.nHours, e.currentReading.kwperhr);
@@ -252,7 +259,7 @@ int searchIndex(ELEXBILL bills[], int n, char accNum[]) {
     return -1;
 }
 
-void userSearch(ELEXBILL bills[], int n) {
+void searchAccNum(ELEXBILL bills[], int n) {
     char accNum[accntNumLength + 1];
     printf("Enter Account Number to search: ");
     scanf("%s", accNum);
@@ -474,7 +481,6 @@ void edito(ELEXBILL bills[], int n){
         printf("Change another value from the record? (y/n): ");
         scanf(" %c", &cont);
     } while (cont == 'y' || cont == 'Y');
-
 }
 
 void CheckBalance(ELEXBILL bills[], int n){
@@ -510,7 +516,7 @@ void create(ELEXBILL bills[], int *n) {
 }
 
 void saveToFile(ELEXBILL bills[], int n) {
-    FILE *fp = fopen("bills.dat", "wb");
+    FILE *fp = fopen("bills.txt", "wb");
     if (fp == NULL) {
         printf("Error saving data to file.\n");
         return;
@@ -523,7 +529,7 @@ void saveToFile(ELEXBILL bills[], int n) {
 }
 
 int loadFromFile(ELEXBILL bills[]) {
-    FILE *fp = fopen("bills.dat", "rb");
+    FILE *fp = fopen("bills.txt", "rb");
     int n = 0;
 
     if (fp == NULL) {
