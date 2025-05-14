@@ -2,7 +2,6 @@
 #include<windows.h>
 #include<string.h>
 
-
 #define accntNumLength 10
 #define MAX 100
 
@@ -51,7 +50,7 @@ void edito(ELEXBILL bills[], int n);
 void display(ELEXBILL e);	
 void printAll(ELEXBILL bills[], int n);
 int searchIndex(ELEXBILL bills[], int n, char accNum[]);
-void adminMode(ELEXBILL bills[], int *n);
+void create(ELEXBILL bills[], int *n);
 void userSearch(ELEXBILL bills[], int n);
 void CheckBalance(ELEXBILL bills[], int n);
 void searchBillCode(ELEXBILL bills[], int n);
@@ -69,7 +68,7 @@ int main() {
 
     do {
         printf("\n--- Electricity Bill System ---\n");
-        printf("1. Admin Mode (Add Record)\n");
+        printf("1. Admin Mode (Create Record)\n");
         printf("2. Search for an Account\n");
         printf("3. Print All Accounts\n");
         printf("4. Edit Account\n");
@@ -87,7 +86,7 @@ int main() {
         switch (choice) {
             case 1:
             	system("cls");
-                adminMode(bills, &n);
+                create(bills, &n);
                 break;
             case 2:
             	system("cls");
@@ -251,17 +250,6 @@ int searchIndex(ELEXBILL bills[], int n, char accNum[]) {
         }
     }
     return -1;
-}
-
-void adminMode(ELEXBILL bills[], int *n) {
-    char cont;
-    do {
-        bills[*n] = getInput();
-        (*n)++;
-
-        printf("Add another record? (y/n): ");
-        scanf(" %c", &cont);
-    } while (cont == 'y' || cont == 'Y');
 }
 
 void userSearch(ELEXBILL bills[], int n) {
@@ -504,6 +492,22 @@ void CheckBalance(ELEXBILL bills[], int n){
     }
 }
 
+void create(ELEXBILL bills[], int *n) {
+    char cont;
+    do {
+        if (*n >= MAX) {
+            printf("Maximum number of records reached.\n");
+            return;
+        }
+
+        bills[*n] = getInput();
+        (*n)++;
+        saveToFile(bills, *n); 
+
+        printf("Record added and saved. Add another? (y/n): ");
+        scanf(" %c", &cont);
+    } while (cont == 'y' || cont == 'Y');
+}
 
 void saveToFile(ELEXBILL bills[], int n) {
     FILE *fp = fopen("bills.dat", "wb");
@@ -534,4 +538,3 @@ int loadFromFile(ELEXBILL bills[]) {
     printf("%d record(s) loaded from file.\n", n);
     return n;
 }
-
